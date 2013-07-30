@@ -108,11 +108,11 @@
         )
 
   (fact "get all keys of entity" :integration :puny
-      (p/entity phone :id number)
+      (p/entity phone :id number :indices [type])
       (defn validate-phone [p] {})
-      (add-phone {:number 1234 :temp 1}) => truthy
-      (add-phone {:number 1235 :temp 1}) => truthy
-      (all-phones) => (contains ["1234" "1235"])
+      (add-phone {:number 1234 :type "android"}) => truthy
+      (add-phone {:number 1235 :type "iOS"}) => truthy
+      (all-phones) => (contains "1234" "1235" :in-any-order)
     )
   )
 

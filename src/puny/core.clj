@@ -56,6 +56,11 @@
   {:index-add (<<< "index-~{name*}") :index-del (<<< "clear-~{name*}-indices")
    :index-get (<<< "get-~{name*}-index") :reindex (<<< "reindex-~{name*}") })
 
+(defn index-key 
+  "index key format, composed of name index type and value: person:namejohn"
+   [name* t v]
+  (str name* t v))
+
 (defmacro index-fns
   "Create index functions (enabled if there are indices defined)."
   [name* {:keys [indices]}]
@@ -64,14 +69,14 @@
     `(do 
        (defn- ~index-add [~'id ~'v]
          (doseq [i# ~indices-ks]
-           (car/sadd (str '~name* i# (get ~'v i#)) ~'id )))
+           (car/sadd (index-key '~name* i# (get ~'v i#)) ~'id )))
 
        (defn ~index-get [~'k ~'v]
-         (wcar (car/smembers (str '~name* ~'k ~'v))))
+         (wcar (car/smembers (index-key '~name* ~'k ~'v))))
 
        (defn- ~index-del [~'id ~'v]
          (doseq [i# ~indices-ks]
-           (car/srem (str '~name* i# (get ~'v i#)) ~'id)))
+           (car/srem (index-key '~name* i# (get ~'v i#)) ~'id)))
 
         (defn- ~reindex [~'id ~'old ~'new]
           (~index-del ~'id ~'old) 
@@ -181,7 +186,8 @@
            (car/del (~id-fn ~'id))))
  
        (defn ~all-fn []
-         (map #(second (split % #":")) (wcar (car/keys (str '~name* ":*") ))))
+         (map #(second (split % #":")) 
+           (filter #(not= (wcar (car/type %)) "set") (wcar (car/keys (str '~name* ":*") )))))
 
        (bang-fns ~name*)
 
