@@ -28,13 +28,13 @@
   (fact "entity with id" :integration :puny
         (p/entity {:ver 1} user :id name)        
         (defn validate-user [user] {})
-        (let [id (add-user {:name "me"})]
-          (get-user "me") => {:name "me"}
-          (user-exists? "me") => truthy
-          (update-user {:name "me" :blue "bar"}) 
-          (get-user "me") => {:name "me" :blue "bar"}
-          (delete-user "me")
-          (user-exists? "me") => falsey))
+        (add-user {:name "me"})
+        (get-user "me") => {:name "me"}
+        (user-exists? "me") => truthy
+        (update-user {:name "me" :blue "bar"}) 
+        (get-user "me") => {:name "me" :blue "bar"}
+        (delete-user "me")
+        (user-exists? "me") => falsey)
 
   (fact "basic index actions" :integration :puny
         (p/index-fns house {:indices [zip n]})

@@ -2,6 +2,8 @@
 
 Puny is a tiny mapping layer from Clojure maps into redis hashes
 
+[![Build Status](https://travis-ci.org/narkisr/puny.png?branch=master)](https://travis-ci.org/narkisr/puny)
+
 # Usage
 
 ```clojure
@@ -33,15 +35,13 @@ An entity with a predefined id property:
 ```clojure
 (p/entity {:ver 1} user :id name)        
 (defn validate-user [user] {})
-(let [id (add-user {:name "me"})]
-   (get-user "me") ;=> {:name "me"}
-   (user-exists? "me") ;=> truthy
-   (update-user {:name "me" :blue "bar"}) 
-   (get-user "me") ;=> {:name "me" :blue "bar"}
-   (delete-user "me")
-   (user-exists? "me") ;=> falsey
-)
-
+(add-user {:name "me"})]
+(get-user "me") ;=> {:name "me"}
+(user-exists? "me") ;=> truthy
+(update-user {:name "me" :blue "bar"}) 
+(get-user "me") ;=> {:name "me" :blue "bar"}
+(delete-user "me")
+(user-exists? "me") ;=> falsey
 ```
 
 An entity with indexes:
