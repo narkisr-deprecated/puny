@@ -187,7 +187,7 @@
  
        (defn ~all-fn []
          (map #(second (split % #":")) 
-           (filter #(not= (wcar (car/type %)) "set") (wcar (car/keys (str '~name* ":*") )))))
+           (filter #(= (wcar (car/type %)) "hash") (wcar (car/keys (str '~name* ":*") )))))
 
        (bang-fns ~name*)
 
