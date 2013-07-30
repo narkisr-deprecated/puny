@@ -1,10 +1,31 @@
-
 # Intro 
 
 Puny is a tiny mapping layer from Clojure maps into redis hashes
 
 # Usage
-TBD
+
+```clojure
+  [puny 0.0.1]
+```
+
+Defining an entity:
+
+```clojure
+(require '[puny.core :as p])
+
+(p/entity foo)        
+
+; a validation fn named validated-{entity} must be defined, it will be called upon add and update
+(defn validate-foo [foo] {})
+
+(let [id (add-foo {:bar 1})]
+  (get-foo id) => {:bar 1}
+  (foo-exists? id) => truthy
+  (update-foo id {:bar 2}) 
+  (get-foo id) => {:bar 2}
+  (delete-foo id)
+  (foo-exists? id) => falsey)
+```
 
 # Copyright and license
 
