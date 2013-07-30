@@ -1,4 +1,4 @@
-(defproject puny "0.1.0"
+(defproject puny "0.1.1"
   :description "A puny map to redis persistency layer"
   :url "https://github.com/narkisr/puny"
   :license  {:name "Apache License, Version 2.0" :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
@@ -19,6 +19,10 @@
   :profiles {:dev {
                :source-paths  ["dev"]
                :dependencies [[org.clojure/tools.trace "0.7.5"] [midje "1.5.1"] [junit/junit "4.11"]]
+              
+              :set-version {
+                  :updates [ 
+                    {:path "README.md" :search-regex #"\"\d+\.\d+\.\d+\""}]}
                }
              }
 
