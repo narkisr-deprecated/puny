@@ -19,6 +19,8 @@
     [puny.redis :only (wcar hsetall*)]
     [clojure.core.strint :only (<<)])
   (:require 
+    [clojure.string :refer [split]]
+    [inflections.core :refer (plural)]
     [taoensso.carmine :as car]))
 
 (defmacro <<< 
@@ -34,9 +36,12 @@
    :add-fn (<<< "add-~{name*}") :update-fn (<<< "update-~{name*}")
    :validate-fn (<<< "validate-~{name*}") :gen-fn (<<< "gen-~{name*}-id") 
    :delete-fn (<<< "delete-~{name*}") :get-fn (<<< "get-~{name*}")
-   :partial-fn (<<< "partial-~{name*}")})
+   :partial-fn (<<< "partial-~{name*}")
+   :all-fn (<<< "all-~(plural name*)")
+   })
 
 (defn id-modifiers [name* opts]
+  "update arguments and key fn matching id-prop existence"
   (if-let [id-prop (opts :id)]
      {:up-args (vector {:keys [id-prop] :as 'v}) :up-id id-prop :add-k-fn (list 'v (keyword id-prop))}
      {:up-args ['id 'v] :up-id 'id :add-k-fn (list (:gen-fn (fn-ids name*)))}))
@@ -157,7 +162,7 @@
   "Generates all the persistency (add/delete/exists etc..) functions for given entity"
   [f & r]
   (let [[meta* name* opts] (if (map? f) [f (first r) (rest r)] [{} f r])
-        {:keys [id-fn delete-fn get-fn exists-fn]} (fn-ids name*)
+        {:keys [id-fn delete-fn get-fn exists-fn all-fn]} (fn-ids name*)
         {:keys [index-del]} (indices-fn-ids name*)]
     `(do 
        (defn ~id-fn [~'id] (str '~name* ":" ~'id))
@@ -175,6 +180,9 @@
            (~index-del ~'id (~get-fn ~'id)) 
            (car/del (~id-fn ~'id))))
  
+       (defn ~all-fn []
+         (map #(second (split % #":")) (wcar (car/keys (str '~name* ":*") ))))
+
        (bang-fns ~name*)
 
        (write-fns ~name* ~opts ~meta*))))

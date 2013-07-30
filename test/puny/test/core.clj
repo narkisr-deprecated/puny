@@ -1,12 +1,9 @@
-(ns puny.integration
+(ns puny.test.core
   (:require 
-   [taoensso.carmine :as car]
-   [puny.redis :as r :refer (clear-all wcar hsetall* missing-keys)]  
-   [puny.core :as p])
+    [puny.redis :as r :refer (clear-all wcar)]  
+    [puny.core :as p])
   (:import clojure.lang.ExceptionInfo)
-  (:use  
-     midje.sweet
-    ))
+  (:use  midje.sweet))
 
 (defn is-type? [type]
   (fn [exception] 
@@ -67,7 +64,7 @@
         (p/entity car :id license :indices [color])        
         (defn validate-car [car] {})
         (add-car {:license 123 :color "black"}) => 123
-        (add-car {:license 123 :color "black"}) => (throws ExceptionInfo (is-type? :puny.integration/conflicting-car))
+        (add-car {:license 123 :color "black"}) => (throws ExceptionInfo (is-type? :puny.test.core/conflicting-car))
         (get-car 123) => {:license 123 :color "black"}
         (car-exists? 123) => truthy
         (get-car-index :color "black") => ["123"]
@@ -78,47 +75,46 @@
         (car-exists? 123) => falsey
         (get-car-index :color "blue") => [])
 
-  (fact "fail fase actions" :integration :puny
+  (fact "fail fast actions" :integration :puny
         (p/entity planet :id name :indices [life])
         (defn validate-planet [planet] {})
         (add-planet {:name "lunar" :life "false"})
         (get-planet "lunar") => {:name "lunar" :life "false"}
         (planet-exists! "lunar") => true
-        (planet-exists! "foo") => (throws ExceptionInfo (is-type? :puny.integration/missing-planet))
-        (delete-planet! "foo") => (throws ExceptionInfo (is-type? :puny.integration/missing-planet))
-        (update-planet {:name "foo"}) => (throws ExceptionInfo (is-type? :puny.integration/missing-planet))
+        (planet-exists! "foo") => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
+        (delete-planet! "foo") => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
+        (update-planet {:name "foo"}) => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
         (get-planet! "lunar") => {:name "lunar" :life "false"}
         (delete-planet! "lunar") 
-        (delete-planet! "lunar") => (throws ExceptionInfo (is-type? :puny.integration/missing-planet))
+        (delete-planet! "lunar") => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
         (get-planet "lunar") => {} 
-        (get-planet! "lunar") => (throws ExceptionInfo (is-type? :puny.integration/missing-planet)) 
+        (get-planet! "lunar") => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet)) 
         )
 
   (fact "entity metadata" :integration :puny
-     (p/entity {:ver 1} metable :id name)
-     (defn validate-metable [metable] {})
-     (add-metable {:name "foo"}) 
-     (get-metable "foo") => {:name "foo"}
-     (update-metable {:name "foo" :c 1}) => truthy
-     (meta (get-metable "foo")) => {:ver 1})
+        (p/entity {:ver 1} metable :id name)
+        (defn validate-metable [metable] {})
+        (add-metable {:name "foo"}) 
+        (get-metable "foo") => {:name "foo"}
+        (update-metable {:name "foo" :c 1}) => truthy
+        (meta (get-metable "foo")) => {:ver 1})
 
   (fact "entity keys deletion during update" :integration :puny
-     (p/entity paint :id color)
-     (defn validate-paint [paint] {})
-     (add-paint {:color "white" :temp 1}) => truthy
-     (update-paint {:color "white" :fixed 2}) => truthy
-     (get-paint "white") => {:color "white" :fixed 2}; temp was removed
+        (p/entity paint :id color)
+        (defn validate-paint [paint] {})
+        (add-paint {:color "white" :temp 1}) => truthy
+        (update-paint {:color "white" :fixed 2}) => truthy
+        (get-paint "white") => {:color "white" :fixed 2}; temp was removed
+        )
+
+  (fact "get all keys of entity" :integration :puny
+      (p/entity phone :id number)
+      (defn validate-phone [p] {})
+      (add-phone {:number 1234 :temp 1}) => truthy
+      (add-phone {:number 1235 :temp 1}) => truthy
+      (all-phones) => ["1234" "1235"]
     )
   )
 
 
-(fact "hsetall sanity" :integration :redis
-     (wcar (car/del "play")) 
-     (wcar (hsetall* "play" {:one {:two {:three 1}}})) => "OK"
-     (wcar (car/hgetall* "play" true)) => {:one {:two {:three 1}}}
-     (wcar (hsetall* "play" {:one {:six {:seven 3} :four {:five 2}}})) => "OK"
-     (wcar (car/hgetall* "play" true)) => {:one {:six {:seven 3} :four {:five 2}}}
-     (let [missing (wcar (missing-keys "play" {:two {:three 2}}))]
-       (wcar (hsetall* "play" {:two {:three 2}} missing))) => "OK"
-     (wcar (car/hgetall* "play" true)) =>  {:two {:three 2}}
-      ) 
+
