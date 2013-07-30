@@ -112,7 +112,7 @@
       (defn validate-phone [p] {})
       (add-phone {:number 1234 :temp 1}) => truthy
       (add-phone {:number 1235 :temp 1}) => truthy
-      (all-phones) => ["1234" "1235"]
+      (all-phones) => (contains ["1234" "1235"])
     )
   )
 
