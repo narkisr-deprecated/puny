@@ -7,7 +7,7 @@ Puny is a tiny mapping layer from Clojure maps into redis hashes
 # Usage
 
 ```clojure
- [puny "0.1.2"]
+ [puny "0.1.3"]
 ```
 
 Defining an without an id:
