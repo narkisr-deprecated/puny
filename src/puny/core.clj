@@ -191,7 +191,16 @@
  
        (defn ~all-fn []
          (map #(second (split % #":")) 
-           (filter #(= (wcar (car/type %)) "hash") (wcar (car/keys (str '~name* ":*") )))))
+           (wcar
+             (car/lua 
+               "local newtbl= {}
+                for i,v in pairs(redis.call('keys', _:keys)) do
+                  if redis.call('type',v)['ok'] == 'hash' then
+                    newtbl[i]=v
+                  end
+                end
+                return newtbl"
+                {} {:keys (str '~name* ":*")}))))
 
        (bang-fns ~name*)
 
