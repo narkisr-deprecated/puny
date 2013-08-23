@@ -114,7 +114,14 @@
       (add-phone {:number 1235 :type "iOS"}) => truthy
       (all-phones) => (contains "1234" "1235" :in-any-order)
     )
-  )
+
+ (fact "get single property of entity" :integration :puny
+      (p/entity insect :id name :indices [family])
+      (defn validate-insect [p] {})
+      (add-insect {:name "mosqito" :family "pests"}) => truthy
+      (get-insect "mosqito" :family) => "pests"
+   )
+ )
 
 
 

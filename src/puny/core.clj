@@ -176,9 +176,13 @@
 
        (index-fns ~name* ~opts)
 
-       (defn ~get-fn [~'id] 
+       (defn ~get-fn 
+        ([~'id] 
           (let [e# (wcar (car/hgetall* (~id-fn ~'id) true))]
             (with-meta (dissoc e# :meta) (e# :meta)) ))
+        ([~'id & ks#] 
+          (wcar (apply car/hget (~id-fn ~'id) ks#)))
+         )
 
        (defn ~delete-fn [~'id] 
          (wcar 
