@@ -3,7 +3,7 @@
     [puny.redis :as r :refer (clear-all wcar)]  
     [puny.core :as p])
   (:import clojure.lang.ExceptionInfo)
-  (:use  midje.sweet))
+  (:use midje.sweet))
 
 (defn is-type? [type]
   (fn [exception] 
