@@ -122,6 +122,19 @@
              (hsetall* (~id-fn ~up-id) (assoc ~'v :meta ~meta*) missing#)))))))
 
 
+(defn- hooks [name* {:keys [create read update delete]}] 
+   (let [{:keys [add-fn update-fn partial-fn]} (fn-ids name*)
+         {:keys [get-fn exists-fn all-fn]} (fn-ids name*)
+         {:keys [exists! get!]} (bang-fn-ids name*) 
+         hs {[add-fn] create [update-fn partial-fn] update [get-fn exists-fn all-fn get! exists!] read }]
+     (partition 2 (flatten (map (fn [[vs k]] (interleave vs (repeat k))) (filter (fn [[vs k]] (identity k)) hs))))))
+
+(defmacro interceptors [name* opts]
+ (let [{:keys [intercept]} (apply hash-map opts)]
+    (concat (list 'do) (map (fn [[f c]] (list 'robert.hooke/add-hook (list 'var f) (list 'var c))) (hooks name* intercept))) 
+   )) 
+
+(macroexpand '(interceptors foo [:intercept {:create bar}] ))
 
 (defmacro entity
   "Generates all the persistency (add/delete/exists etc..) functions for given entity"
@@ -164,5 +177,8 @@
 
        (bang-fns ~name*)
 
-       (write-fns ~name* ~opts ~meta*))))
+       (write-fns ~name* ~opts ~meta*)
+
+       (interceptors ~name* ~opts) 
+       )))
 
