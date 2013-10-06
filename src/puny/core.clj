@@ -123,10 +123,12 @@
 
 
 (defn- hooks [name* {:keys [create read update delete]}] 
-   (let [{:keys [add-fn update-fn partial-fn]} (fn-ids name*)
+   (let [{:keys [add-fn update-fn partial-fn delete-fn]} (fn-ids name*)
          {:keys [get-fn exists-fn all-fn]} (fn-ids name*)
-         {:keys [exists! get!]} (bang-fn-ids name*) 
-         hs {[add-fn] create [update-fn partial-fn] update [get-fn exists-fn all-fn get! exists!] read }]
+         {:keys [exists! get! delete!]} (bang-fn-ids name*) 
+         {:keys [index-add index-del index-get reindex]} (indices-fn-ids name*)
+         hs {[add-fn index-add] create [update-fn partial-fn reindex] update 
+             [get-fn exists-fn all-fn get! exists! index-get] read [delete-fn index-del] delete }]
      (partition 2 (flatten (map (fn [[vs k]] (interleave vs (repeat k))) (filter (fn [[vs k]] (identity k)) hs))))))
 
 (defmacro interceptors [name* opts]
