@@ -2,7 +2,9 @@
   :description "A puny map to redis persistency layer"
   :url "https://github.com/narkisr/puny"
   :license  {:name "Apache License, Version 2.0" :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [
+                 [robert/hooke "1.3.0"] 
+                 [org.clojure/clojure "1.5.1"]
                  [com.taoensso/carmine "2.0.0"]
                  [org.flatland/useful "0.10.3"]
                  [org.clojure/core.incubator "0.1.3"]
