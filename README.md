@@ -14,7 +14,7 @@ Puny is a tiny persistency layer for Clojure maps into redis hashes, it includes
 # Usage
 
 ```clojure
- [puny "0.2.0"]
+ [puny "0.2.1"]
 ```
 
 ## Walk through
