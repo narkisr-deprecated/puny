@@ -129,7 +129,9 @@
          {:keys [index-add index-del index-get reindex]} (indices-fn-ids name*)
          hs {[add-fn index-add] create [update-fn partial-fn reindex] update 
              [get-fn exists-fn all-fn get! exists! index-get] read [delete-fn index-del] delete }]
-     (partition 2 (flatten (map (fn [[vs k]] (interleave vs (repeat k))) (filter (fn [[vs k]] (identity k)) hs))))))
+     (partition 2 
+       (flatten (map (fn [[vs ks]] (map #(interleave vs (repeat %)) ks)) 
+                (filter (fn [[vs ks]] (identity ks)) hs))))))
 
 (defmacro interceptors [name* opts]
  (let [{:keys [intercept]} (apply hash-map opts)]
