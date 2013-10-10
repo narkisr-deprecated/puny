@@ -80,7 +80,8 @@ Metadata and hooks (automatic versioning):
       ))
 
 ; each entity that is read gets update automaticly, versioning info is set in metadata
-(p/entity {:version current-version} car :id license :indices [color] :intercept {:read [upgrade-car]})
+(p/entity {:version current-version} car :id license 
+    :indices [color] :intercept {:read [upgrade-car]})
 
 (defn validate-car [car] {})
 
