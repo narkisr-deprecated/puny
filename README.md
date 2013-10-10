@@ -57,6 +57,18 @@ An entity with a internal id property:
 (get-user "me") ;=> {:name "me"}
 ```
 
+Fail fast functions:
+
+```clojure
+(p/entity planet :id name :indices [life])
+(defn validate-planet [planet] {})
+(add-planet {:name "lunar" :life "false"})
+(planet-exists! "lunar"); => true
+(planet-exists! "foo"); => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
+(delete-planet! "foo"); => (throws ExceptionInfo (is-type? :puny.test.core/missing-planet))
+
+```
+
 Fast retrieval of all entity keys:
 
 ```clojure
