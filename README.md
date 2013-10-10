@@ -12,7 +12,7 @@ It includes support for:
 * Attaching persisted metadata like versioning etc..
 * Defining interceptors on CRUD functions enabling support for security checks, automatic migration etc..
 
-Puny is based on [carmin](https://github.com/ptaoussanis/carmine), a big thank you to Peter its author.
+Puny is based on [carmine](https://github.com/ptaoussanis/carmine), a big thank you to Peter its author.
 
 [![Build Status](https://travis-ci.org/narkisr/puny.png?branch=master)](https://travis-ci.org/narkisr/puny)
 
