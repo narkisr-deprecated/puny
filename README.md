@@ -57,6 +57,17 @@ An entity with a internal id property:
 (get-user "me") ;=> {:name "me"}
 ```
 
+Fast retrieval of entity keys:
+
+```clojure
+ (p/entity phone :id number :indices [type])
+ (defn validate-phone [p] {})
+ (add-phone {:number 1234 :type "android"})
+ (add-phone {:number 1235 :type "iOS"}) 
+ (all-phones); => '("1234" "1235")
+    
+```
+
 Defining indexes:
 
 ```clojure
