@@ -138,8 +138,6 @@
     (concat (list 'do) (map (fn [[f c]] (list 'robert.hooke/add-hook (list 'var f) (list 'var c))) (hooks name* intercept))) 
    )) 
 
-(macroexpand '(interceptors foo [:intercept {:create bar}] ))
-
 (defmacro entity
   "Generates all the persistency (add/delete/exists etc..) functions for given entity"
   [f & r]
