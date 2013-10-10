@@ -3,7 +3,7 @@
 Puny is a tiny layer for persisting Clojure maps into Redis hashes, it aims to reduce boilerplate and to enable end to end life cycle management of entities from validation to data migration and indexing.
 
 
- it includes support for:
+It includes support for:
 
 * Complete generated CRUD API.
 * Automatic keys and id management (both generated and internal to the entity).
@@ -11,6 +11,8 @@ Puny is a tiny layer for persisting Clojure maps into Redis hashes, it aims to r
 * Declaring indexes.
 * Attaching persisted metadata like versioning etc..
 * Defining interceptors on CRUD functions enabling support for security checks, automatic migration etc..
+
+Puny is based on [carmin](https://github.com/ptaoussanis/carmine), a big thank you to Peter its author.
 
 [![Build Status](https://travis-ci.org/narkisr/puny.png?branch=master)](https://travis-ci.org/narkisr/puny)
 
