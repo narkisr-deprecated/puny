@@ -57,7 +57,7 @@ An entity with a internal id property:
 (get-user "me") ;=> {:name "me"}
 ```
 
-Fast retrieval of entity keys:
+Fast retrieval of all entity keys:
 
 ```clojure
  (p/entity phone :id number :indices [type])
