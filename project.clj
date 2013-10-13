@@ -1,4 +1,4 @@
-(defproject puny "0.2.1"
+(defproject puny "0.2.2"
   :description "A puny map to redis persistency layer"
   :url "https://github.com/narkisr/puny"
   :license  {:name "Apache License, Version 2.0" :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
