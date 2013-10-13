@@ -184,3 +184,6 @@
        (interceptors ~name* ~opts) 
        )))
 
+(comment 
+  (clojure.pprint/pprint 
+    (macroexpand '(interceptors foo [:intercept {:read [mirate perm]}] ))))
