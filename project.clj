@@ -6,6 +6,7 @@
                  [robert/hooke "1.3.0"] 
                  [org.clojure/clojure "1.5.1"]
                  [com.taoensso/carmine "2.0.0"]
+                 [substantiation "0.0.7"]
                  [org.flatland/useful "0.10.3"]
                  [org.clojure/core.incubator "0.1.3"]
                  [inflections "0.8.1"]]
