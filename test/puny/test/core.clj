@@ -31,6 +31,8 @@
         (user-exists? "me") => truthy
         (update-user {:name "me" :blue "bar"}) 
         (get-user "me") => {:name "me" :blue "bar"}
+        (partial-user {:name "me" :blue "zzz"})
+        (get-user "me") => {:name "me" :blue "zzz"}
         (delete-user "me")
         (user-exists? "me") => falsey)
 
