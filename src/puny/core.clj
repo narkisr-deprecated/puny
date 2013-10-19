@@ -83,7 +83,8 @@
 (defmacro write-fns 
   "Creates the add/update functions both take into account if id is generated of provided"
   [name* opts meta*]
-  (let [{:keys [id-fn validate-fn add-fn update-fn gen-fn get-fn partial-fn exists-fn]} (fn-ids name*)
+  (let [{:keys [id-fn validate-fn add-fn update-fn gen-fn get-fn exists-fn]} (fn-ids name*)
+        {:keys [partial-fn merge-fn]} (fn-ids name*)
         {:keys [missing-ex]} (bang-fn-ids name*) opts-m (apply hash-map opts)
         {:keys [up-args up-id add-k-fn]} (id-modifiers name* opts-m)
         {:keys [index-add index-del reindex]} (indices-fn-ids name*)
@@ -105,9 +106,16 @@
              (hsetall* (~id-fn id#) (assoc ~'v :meta ~meta*))) 
            id#))
 
+       (defn ~merge-fn [a# b#] 
+          (cond 
+            (and (map? a#) (map? b#)) (merge a# b#) 
+            :else b#
+            )
+         )
+
        (defn ~partial-fn ~up-args
          (~exists! ~up-id)
-         (let [orig# (wcar (car/hgetall* (~id-fn ~up-id) true)) updated# (merge orig# ~'v)]
+         (let [orig# (wcar (car/hgetall* (~id-fn ~up-id) true)) updated# (merge-with ~merge-fn orig# ~'v)]
            (wcar 
              (~reindex ~up-id orig# updated#)
              (hsetall* (~id-fn ~up-id) (assoc updated# :meta ~meta*)))))

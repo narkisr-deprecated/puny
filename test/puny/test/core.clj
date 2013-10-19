@@ -121,9 +121,17 @@
       (p/entity insect :id name :indices [family])
       (defn validate-insect [p] {})
       (add-insect {:name "mosqito" :family "pests"}) => truthy
-      (get-insect "mosqito" :family) => "pests"
-   )
- )
+      (get-insect "mosqito" :family) => "pests")
 
-
-
+ (fact "partial updates" :integration :puny
+    (p/entity nested :id name)
+    (defn validate-nested [p] {})
+    (add-nested {:name "nestea" :nested {:val 1}}) => truthy
+    (partial-nested {:name "nestea" :nested {:val 2}}) => truthy
+    (get-nested "nestea") => {:name "nestea" :nested {:val 2}} 
+    (partial-nested {:name "nestea" :foo 1}) => truthy
+    (get-nested "nestea") => {:name "nestea" :nested {:val 2} :foo 1} 
+    (partial-nested {:name "nestea"}) => truthy
+    (get-nested "nestea") => {:name "nestea" :nested {:val 2} :foo 1} 
+   ) 
+)

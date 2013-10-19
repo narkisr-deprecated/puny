@@ -2,9 +2,7 @@
   "Misc id names of all functions, args etc.."
   (:require 
     [clojure.core.strint :refer (<<)] 
-    [inflections.core :refer (plural)]
-    )
- )
+    [inflections.core :refer (plural)]))
 
 (defmacro <<< 
   "String interpulation into a symbol"
@@ -19,7 +17,7 @@
    :add-fn (<<< "add-~{name*}") :update-fn (<<< "update-~{name*}")
    :validate-fn (<<< "validate-~{name*}") :gen-fn (<<< "gen-~{name*}-id") 
    :delete-fn (<<< "delete-~{name*}") :get-fn (<<< "get-~{name*}")
-   :partial-fn (<<< "partial-~{name*}")
+   :partial-fn (<<< "partial-~{name*}") :merge-fn (<<< "merge-~{name*}")
    :all-fn (<<< "all-~(plural name*)")
    })
 
