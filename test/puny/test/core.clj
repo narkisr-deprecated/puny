@@ -125,7 +125,7 @@
 
  (fact "partial updates" :integration :puny
     (p/entity nested :id name)
-    (defn validate-nested [p] {})
+    (defn validate-nested [{:keys [nested]}] (assert (> (nested :val) 0)))
     (add-nested {:name "nestea" :nested {:val 1}}) => truthy
     (partial-nested {:name "nestea" :nested {:val 2}}) => truthy
     (get-nested "nestea") => {:name "nestea" :nested {:val 2}} 
@@ -133,5 +133,6 @@
     (get-nested "nestea") => {:name "nestea" :nested {:val 2} :foo 1} 
     (partial-nested {:name "nestea"}) => truthy
     (get-nested "nestea") => {:name "nestea" :nested {:val 2} :foo 1} 
-   ) 
+    (partial-nested {:name "nestea" :nested {:val 0} }) => (throws java.lang.AssertionError))
+
 )

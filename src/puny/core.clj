@@ -116,6 +116,7 @@
        (defn ~partial-fn ~up-args
          (~exists! ~up-id)
          (let [orig# (wcar (car/hgetall* (~id-fn ~up-id) true)) updated# (merge-with ~merge-fn orig# ~'v)]
+          (~validate-fn updated#)
            (wcar 
              (~reindex ~up-id orig# updated#)
              (hsetall* (~id-fn ~up-id) (assoc updated# :meta ~meta*)))))
