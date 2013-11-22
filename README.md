@@ -19,7 +19,7 @@ Puny is based on [carmine](https://github.com/ptaoussanis/carmine), a big thank 
 # Usage
 
 ```clojure
- [puny "0.2.4"]
+ [puny "0.2.5"]
 ```
 
 ## Walk through
