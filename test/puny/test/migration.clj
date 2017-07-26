@@ -1,9 +1,9 @@
 (ns puny.test.migration
   "puny migration support"
-  (:require 
-    [taoensso.carmine :as car]
-    [puny.redis :as r :refer (clear-all wcar)]  
-    [puny.core :as p])
+  (:require
+   [taoensso.carmine :as car]
+   [puny.redis :as r :refer (clear-all wcar)]
+   [puny.core :as p])
   (:import clojure.lang.ExceptionInfo)
   (:use midje.sweet))
 
@@ -13,10 +13,10 @@
 
 (declare update-car)
 
-(defn upgrade-car [f & args] 
-    (let [res (apply f args) version (-> res meta :version)]
-      (if (and (map? res) (or (nil? version) (> current-version version)))
-        (do (update-car (assoc res :tires "big")) (apply f args)) res)))
+(defn upgrade-car [f & args]
+  (let [res (apply f args) version (-> res meta :version)]
+    (if (and (map? res) (or (nil? version) (> current-version version)))
+      (do (update-car (assoc res :tires "big")) (apply f args)) res)))
 
 (with-state-changes [(before :facts (clear-all))]
   (fact "basic upgrade" :integration :puny
